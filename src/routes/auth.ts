@@ -2,11 +2,11 @@ import { Request, Response, Router } from "express";
 import { validate, isEmpty} from 'class-validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import secret from '../config/config'
+
 import cookie from 'cookie'
 import dotenv from 'dotenv';
 
-import { User } from "../entities/User";
+import  User  from "../entities/User";
 import auth from '../middleware/auth'
 
 const register = async (req: Request, res: Response) => {
