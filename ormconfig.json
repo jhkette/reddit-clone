@@ -5,7 +5,7 @@
    "username": "joseph",
    "password": "guesswho",
    "database": "lireddit",
-   "synchronize": true,
+   "synchronize": false,
    "logging": true,
    "entities": [
       "src/entities/**/*.ts"

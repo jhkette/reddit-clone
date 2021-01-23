@@ -10,6 +10,7 @@ dotenv.config()
 
 import authRoutes from './routes/auth'
 import postRoutes from './routes/posts'
+import subRoutes from './routes/subs'
 import trim from './middleware/trim'
 
 
@@ -30,6 +31,9 @@ app.use('/api/auth', authRoutes)
 
 // post routes
 app.use('/api/post', postRoutes)
+
+// post routes
+app.use('/api/subs', subRoutes)
 
 
 app.listen(PORT, async () => {

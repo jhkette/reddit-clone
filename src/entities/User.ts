@@ -12,6 +12,7 @@ import Entity from "./Entity";
 import Post from "./Post";
 
 @TOEntity("users")
+// extends base class Entity
 export default class User extends Entity {
   constructor(user: Partial<User>) {
     super();
@@ -31,13 +32,13 @@ export default class User extends Entity {
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
-  //   hide password
+  // hide password
   @Exclude()
   @Column()
   @Length(6, 255)
   password: string;
 
-  //   lifecycle hook
+  // lifecycle hook
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 6);

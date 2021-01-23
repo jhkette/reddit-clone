@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import cookie from 'cookie'
-import dotenv from 'dotenv';
+
 
 import  User  from "../entities/User";
 import auth from '../middleware/auth'
