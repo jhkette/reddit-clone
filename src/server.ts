@@ -30,7 +30,7 @@ app.get("/", (_, res) => {
 app.use('/api/auth', authRoutes)
 
 // post routes
-app.use('/api/post', postRoutes)
+app.use('/api/posts', postRoutes)
 
 // post routes
 app.use('/api/subs', subRoutes)
