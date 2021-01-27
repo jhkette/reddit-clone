@@ -1,65 +1,105 @@
+import Axios from 'axios'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Link from 'next/link'
+import { Fragment, useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+import { Post } from '../types'
+
+dayjs.extend(relativeTime)
 
 export default function Home() {
+  const [posts, setPosts] = useState<Post[]>([])
+
+  useEffect(() => {
+    Axios.get('/posts')
+      .then((res) => setPosts(res.data))
+      .catch((err) => console.log(err))
+  }, [])
+
   return (
-    <div className={styles.container}>
+    <div className="pt-12">
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>readit: the front page of the internet</title>
       </Head>
+      <div className="container flex pt-4">
+        {/* Posts feed */}
+        <div className="w-160">
+          {posts.map((post) => (
+            <div key={post.identifier} className="flex mb-4 bg-white rounded">
+              {/* Vote section */}
+              <div className="w-10 text-center bg-gray-200 rounded-l">
+                <p>V</p>
+              </div>
+              {/* Post data section */}
+              <div className="w-full p-2">
+                <div className="flex items-center">
+                  <Link href={`/r/${post.subName}`}>
+                    <Fragment>
+                      <img
+                        src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                        className="w-6 h-6 mr-1 rounded-full cursor-pointer"
+                      />
+                      <a className="text-xs font-bold cursor-pointer hover:underline">
+                        /r/{post.subName}
+                      </a>
+                    </Fragment>
+                  </Link>
+                  <p className="text-xs text-gray-500">
+                    <span className="mx-1">•</span>
+                    Posted by
+                    <Link href={`/u/${post.username}`}>
+                      <a className="mx-1 hover:underline">/u/{post.username}</a>
+                    </Link>
+                    <Link href={post.url}>
+                      <a className="mx-1 hover:underline">
+                        {dayjs(post.createdAt).fromNow()}
+                      </a>
+                    </Link>
+                  </p>
+                </div>
+                <Link href={post.url}>
+                  <a className="my-1 text-lg font-medium">{post.title}</a>
+                </Link>
+                {post.body && <p className="my-1 text-sm">{post.body}</p>}
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+                <div className="flex">
+                  <Link href={post.url}>
+                    <a>
+                      <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+                        <i className="mr-1 fas fa-comment-alt fa-xs"></i>
+                        <span className="font-bold">20 Comments</span>
+                      </div>
+                    </a>
+                  </Link>
+                  <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+                    <i className="mr-1 fas fa-share fa-xs"></i>
+                    <span className="font-bold">Share</span>
+                  </div>
+                  <div className="px-1 py-1 mr-1 text-xs text-gray-400 rounded cursor-pointer hover:bg-gray-200">
+                    <i className="mr-1 fas fa-bookmark fa-xs"></i>
+                    <span className="font-bold">Save</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+        {/* Sidebar */}
+      </div>
     </div>
   )
 }
+
+// server side rendering
+// see https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   try {
+//     const res = await Axios.get('/posts')
+
+//     return { props: { posts: res.data } }
+//   } catch (err) {
+//     return { props: { error: 'Something went wrong' } }
+//   }
+// }
