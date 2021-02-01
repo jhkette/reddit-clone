@@ -1,8 +1,10 @@
 import { Request, Response, Router } from "express";
 import auth from "../middleware/auth";
+import user from "../middleware/user"; 
 import Post from "../entities/Post";
 import Sub from "../entities/Sub";
 import Comment from "../entities/Comment";
+
 
 const createPost = async (req: Request, res: Response) => {
     // destructure stuff from req.body
@@ -32,7 +34,12 @@ const getPosts = async (_: Request, res: Response) => {
     //   get all posts and order by createdat
     const posts = await Post.find({
       order: { createdAt: "DESC" },
+      relations: ['comments', 'votes', 'sub']
     });
+    // get the users specific votes on each post
+    if(res.locals.user){
+      posts.forEach((p) => p.setUserVote(res.locals.user))
+    }
     // return posts
     return res.json(posts);
   } catch (err) {
@@ -82,10 +89,12 @@ const commentOnPost = async (req: Request, res: Response) => {
 };
 
 const router = Router();
-router.post("/", auth, createPost);
-router.get("/", getPosts);
+router.post("/", user, auth, createPost);
+// we can get user here - but we don't needd to see if they are auth
+// for getPosts
+router.get("/", user, getPosts);
 router.get("/:identifier/:slug", getPost);
 
-router.post("/:identifier/:slug/comments", auth, commentOnPost);
+router.post("/:identifier/:slug/comments", user, auth, commentOnPost);
 
 export default router;

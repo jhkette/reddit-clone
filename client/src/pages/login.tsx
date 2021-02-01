@@ -1,32 +1,38 @@
-import { FormEvent, useState } from 'react'
-import Head from 'next/head'
-import Link from 'next/link'
-import Axios from 'axios'
-import { useRouter } from 'next/router'
+import { FormEvent, useState } from "react";
+import Head from "next/head";
+import Link from "next/link";
+import Axios from "axios";
+import { useRouter } from "next/router";
+import {useAuthDispatch, useAuthState} from '../context/auth'
 
-import InputGroup from '../components/InputGroup'
+import InputGroup from "../components/InputGroup";
 
 export default function Register() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [errors, setErrors] = useState<any>({})
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<any>({});
+  const {authenticated} = useAuthState()
+  const router = useRouter();  
 
-  const router = useRouter()
+ 
+  if(authenticated) router.push('/')
+  const dispatch = useAuthDispatch()
 
   const submitForm = async (event: FormEvent) => {
-    event.preventDefault()
-
+    event.preventDefault();
     try {
-      await Axios.post('/auth/login', {
+     const res = await Axios.post("/auth/login", {
         username,
         password,
-      })
+      });
 
-      router.push('/')
+      dispatch('LOGIN', res.data)
+
+      router.push("/");
     } catch (err) {
-      setErrors(err.response.data)
+      setErrors(err.response.data);
     }
-  }
+  };
 
   return (
     <div className="flex">
@@ -75,5 +81,5 @@ export default function Register() {
         </div>
       </div>
     </div>
-  )
+  );
 }
