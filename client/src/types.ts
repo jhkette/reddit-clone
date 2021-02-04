@@ -20,3 +20,18 @@ export interface Post {
     createAt: string
     updatdeAt: string
   }
+
+  export interface Sub {
+    createdAt: string
+    updatedAt: string
+    name: string
+    title: string
+    description: string
+    imageUrn: string
+    bannerUrn: string
+    username: string
+    posts: Post[]
+    // virtuals
+    imageUrl: string
+    bannerUrl: string
+  }

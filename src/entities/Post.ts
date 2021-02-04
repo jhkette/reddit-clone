@@ -84,9 +84,12 @@ export default class Post extends Entity {
     this.userVote = index > -1 ? this.votes[index].value : 0;
   }
 
+
   @BeforeInsert()
   makeIdAndSlug() {
     this.identifier = makeId(7);
     this.slug = slugify(this.title);
   }
+
+ 
 }

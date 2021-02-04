@@ -23,6 +23,8 @@ const PORT = process.env.PORT
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser())
+// public directory for static files
+app.use(express.static('public'))
 
 
 app.use(
@@ -30,8 +32,6 @@ app.use(
     credentials: true,
     origin: process.env.ORIGIN ,
     optionsSuccessStatus: 200,
-   
-  
   })
 )
 // use middleware trim

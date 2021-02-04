@@ -1,8 +1,9 @@
-import { Request, Response, Router } from 'express'
+import { NextFunction, Request, Response, Router } from 'express'
 import { isEmpty } from 'class-validator'
 import { getRepository } from 'typeorm'
 import multer, { FileFilterCallback } from 'multer'
 import path from 'path'
+import fs from 'fs'
 
 import User from '../entities/User'
 import Sub from '../entities/Sub'
@@ -13,7 +14,6 @@ import {makeId} from '../util/helpers'
 
 const createSub = async (req: Request, res: Response) => {
   const { name, title, description } = req.body
-
   const user: User = res.locals.user
 
   try {
@@ -71,6 +71,24 @@ const getSub = async (req: Request, res: Response) => {
     
   }
 }
+const ownSub = async (req: Request, res: Response, next: NextFunction) => {
+  const user: User = res.locals.user
+
+  try {
+    const sub = await Sub.findOneOrFail({where: {name: req.params.name}})
+
+    if(sub.username !== user.username){
+      return res.status(403).json({error: 'You dont own this'})
+    }
+
+    res.locals.sub = sub
+    return next()
+    
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({error: 'Something went wrong'})
+  }
+}
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -91,13 +109,45 @@ const upload = multer({
 }) 
 
 
-const uploadSubImage = async (_: Request, res: Response) => {
-    return res.json({success: true})
+const uploadSubImage = async (req: Request, res: Response) => {
+  const sub: Sub = res.locals.sub
+  try {
+    const type = req.body.type
+    console.log(req.file)
+
+    if (type !== 'image' && type !== 'banner') {
+      // delete file
+      fs.unlinkSync(req.file.path)
+      return res.status(400).json({ error: 'Invalid type' })
+    }
+    // declare imageURN
+    let oldImageUrn: string = ''
+    // if type == 
+    if (type === 'image') {
+      // if sub.imageUrn is null  oldImageUrn == null
+      oldImageUrn = sub.imageUrn ?? ''
+      sub.imageUrn = req.file.filename
+    } else if (type === 'banner') {
+      // if sub.bannerUrn is null  oldImageUrn == null
+      oldImageUrn = sub.bannerUrn ?? ''
+      sub.bannerUrn = req.file.filename
+    }
+    // save sub
+    await sub.save()
+    // if sub.image or banner.image != an empty string delete old image
+    if (oldImageUrn !== '') {
+      fs.unlinkSync(`public\\images\\${oldImageUrn}`)
+    }
+    return res.json(sub)
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ error: 'Something went wrong' })
+  }
 }
 
 const router = Router()
 
-router.post('/:name/image', user, auth, upload.single('file'), uploadSubImage)
+router.post('/:name/image', user, auth, ownSub, upload.single('file'), uploadSubImage)
 router.post('/', user, auth, createSub)
 router.get('/:name', user, getSub)
 
