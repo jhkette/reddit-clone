@@ -17,25 +17,27 @@ import { FormEvent, useState } from 'react'
 dayjs.extend(relativeTime)
 
 export default function PostPage() {
-  // Local state
+  // Local state - this is comment from form
+  // it is posted to DB using axios when form is submitted
   const [newComment, setNewComment] = useState('')
   // Global state
   const { authenticated, user } = useAuthState()
 
   // Utils
   const router = useRouter()
+  // get identifiier, sub and slug from URL (ie via router query)
   const { identifier, sub, slug } = router.query
-
+  // data from useSWR which gets posts
   const { data: post, error } = useSWR<Post>(
     identifier && slug ? `/posts/${identifier}/${slug}` : null
   )
-
+  // get data for comment using useSWR
   const { data: comments, revalidate } = useSWR<Comment[]>(
     identifier && slug ? `/posts/${identifier}/${slug}/comments` : null
   )
-
+  // if error go to home page
   if (error) router.push('/')
-
+  // VOTE FUNCTION
   const vote = async (value: number, comment?: Comment) => {
     // If not logged in go to login
     if (!authenticated) router.push('/login')
@@ -48,30 +50,30 @@ export default function PostPage() {
       value = 0
 
     try {
+      // post new Vote
       await Axios.post('/misc/vote', {
         identifier,
         slug,
         commentIdentifier: comment?.identifier,
         value,
       })
-
+      // and revalidate to refresh numbers
       revalidate()
     } catch (err) {
       console.log(err)
     }
   }
-
+  // submitComment function 
   const submitComment = async (event: FormEvent) => {
     event.preventDefault()
     if (newComment.trim() === '') return
 
     try {
+      // post 
       await Axios.post(`/posts/${post.identifier}/${post.slug}/comments`, {
         body: newComment,
       })
-
       setNewComment('')
-
       revalidate()
     } catch (err) {
       console.log(err)
