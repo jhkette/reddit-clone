@@ -17,10 +17,8 @@ const fetcher = async (url: string) => {
   try {
     const res = await axios.get(url)
     return res.data
-    
   } catch (err) {
-    throw err.response.data
-    
+    throw err.response.data   
   }
 }
 

@@ -14,7 +14,6 @@ export default function Register() {
   const {authenticated} = useAuthState()
   const router = useRouter();  
 
- 
   if(authenticated) router.push('/')
   const dispatch = useAuthDispatch()
 

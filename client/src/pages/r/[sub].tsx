@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { ChangeEvent, createRef, Fragment, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import PostCard from '../../components/PostCard'
+import Sidebar from '../../components/Sidebar'
 import Image from 'next/image'
 import classNames from 'classnames'
 
@@ -12,42 +13,43 @@ import Axios from 'axios'
 
 export default function SubPage() {
   // Local state
+  // it gets set by useEffect hook
   const [ownSub, setOwnSub] = useState(false)
-  // Global state
+  // Global state - get if the authenticaded and user details
   const { authenticated, user } = useAuthState()
   // Utils
   const router = useRouter()
   const fileInputRef = createRef<HTMLInputElement>()
-
+  // get subName from url params. 
   const subName = router.query.sub
-
+  // data - get sub / error / revalidate(an swr function)
   const { data: sub, error, revalidate } = useSWR<Sub>(
+    // the subs url or null
     subName ? `/subs/${subName}` : null
   )
-
+  //  useeffect hook which setsownsub
   useEffect(() => {
     if (!sub) return
     setOwnSub(authenticated && user.username === sub.username)
   }, [sub])
-
+  // openFileInput is a function that open file selection window
   const openFileInput = (type: string) => {
     if (!ownSub) return
     fileInputRef.current.name = type
     fileInputRef.current.click()
   }
-
+  //  uploadimage gets file appends file and fileinput
   const uploadImage = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0]
-
     const formData = new FormData()
     formData.append('file', file)
     formData.append('type', fileInputRef.current.name)
 
     try {
+      // post image data
       await Axios.post<Sub>(`/subs/${sub.name}/image`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
-
       revalidate()
     } catch (err) {
       console.log(err)
@@ -133,6 +135,7 @@ export default function SubPage() {
           {/* Posts & Sidebar */}
           <div className="container flex pt-5">
             <div className="w-160">{postsMarkup}</div>
+            <Sidebar sub={sub} />
           </div>
         </Fragment>
       )}

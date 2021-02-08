@@ -47,9 +47,6 @@ const createSub = async (req: Request, res: Response) => {
 } 
 
 const getSub = async (req: Request, res: Response) => {
-
- 
-
   const name = req.params.name
   try {
     const sub = await Sub.findOneOrFail({name})
@@ -76,11 +73,9 @@ const ownSub = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const sub = await Sub.findOneOrFail({where: {name: req.params.name}})
-
     if(sub.username !== user.username){
       return res.status(403).json({error: 'You dont own this'})
     }
-
     res.locals.sub = sub
     return next()
     
