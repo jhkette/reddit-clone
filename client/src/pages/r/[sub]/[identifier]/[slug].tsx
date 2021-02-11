@@ -69,7 +69,7 @@ export default function PostPage() {
     if (newComment.trim() === '') return
 
     try {
-      // post 
+      // use axios to post the newComment - this is stored in local state
       await Axios.post(`/posts/${post.identifier}/${post.slug}/comments`, {
         body: newComment,
       })
@@ -110,7 +110,7 @@ export default function PostPage() {
             {post && (
               <>
                 <div className="flex">
-                  {/* Vote section */}
+                  {/*------------------------ VOTE SECTION--------------------------------------- */}
                   <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
                     {/* Upvote */}
                     <div
@@ -181,6 +181,7 @@ export default function PostPage() {
                 </div>
                 {/* Comment input area */}
                 <div className="pl-10 pr-6 mb-4">
+                  {/* only show if authenticated */}
                   {authenticated ? (
                     <div>
                       <p className="mb-1 text-xs">
@@ -192,6 +193,7 @@ export default function PostPage() {
                         </Link>
                       </p>
                       <form onSubmit={submitComment}>
+                        {/* this is the comment form */}
                         <textarea
                           className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-gray-600"
                           onChange={(e) => setNewComment(e.target.value)}
@@ -208,6 +210,7 @@ export default function PostPage() {
                       </form>
                     </div>
                   ) : (
+                    // if not auth login or leave or comment
                     <div className="flex items-center justify-between px-2 py-4 border border-gray-200 rounded">
                       <p className="font-semibold text-gray-400">
                         Log in or sign up to leave a comment
@@ -226,7 +229,7 @@ export default function PostPage() {
                   )}
                 </div>
                 <hr />
-                {/* Comments feed */}
+                {/*---------------------------------------- COMMENTS FEED---------------------------------------*/}
                 {comments?.map((comment) => (
                   <div className="flex" key={comment.identifier}>
                     {/* Vote section */}

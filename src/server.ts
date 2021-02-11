@@ -13,6 +13,8 @@ import authRoutes from './routes/auth'
 import postRoutes from './routes/posts'
 import subRoutes from './routes/subs'
 import miscRoutes from './routes/misc'
+import userRoutes from './routes/users'
+
 import trim from './middleware/trim'
 
 
@@ -52,6 +54,9 @@ app.use('/api/subs', subRoutes)
 
 // post routes
 app.use('/api/misc', miscRoutes)
+
+// user routes
+app.use('/api/users', userRoutes)
 
 
 app.listen(PORT, async () => {

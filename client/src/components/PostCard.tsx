@@ -1,16 +1,18 @@
+import Link from 'next/link'
+import Axios from 'axios'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import classNames from 'classnames'
 
-import Link from "next/link";
-import { Post } from "../types";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import axios from "axios";
-import classNames from "classnames";
-import ActionButton from "./ActionButton"
+import { Post } from '../types'
+import ActionButton from './ActionButton'
+
+dayjs.extend(relativeTime)
 
 interface PostCardProps {
-  post: Post;
+  post: Post
 }
-dayjs.extend(relativeTime);
+
 export default function PostCard({
   post: {
     identifier,
@@ -26,43 +28,44 @@ export default function PostCard({
     username,
   },
 }: PostCardProps) {
-  const vote = async (value) => {
+  const vote = async (value: number) => {
     try {
-      const res = await axios.post("/misc/vote", {
+      const res = await Axios.post('/misc/vote', {
         identifier,
         slug,
         value,
-      });
-      console.log(res.data);
+      })
+
+      console.log(res.data)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
+
   return (
     <div key={identifier} className="flex mb-4 bg-white rounded">
       {/* Vote section */}
       <div className="w-10 py-3 text-center bg-gray-200 rounded-l">
-        {/* upvote */}
+        {/* Upvote */}
         <div
-          className="mx-auto text-gray-400 cursor-pointer w6 rounder hover:bg-gray-300 hover:text-red-500"
+          className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
           onClick={() => vote(1)}
         >
           <i
-            className={classNames("icon-arrow-up", {
-              "text-red-500": userVote === 1,
+            className={classNames('icon-arrow-up', {
+              'text-red-500': userVote === 1,
             })}
           ></i>
         </div>
         <p className="text-xs font-bold">{voteScore}</p>
-        {/* downvote */}
-
+        {/* Downvote */}
         <div
-          className="mx-auto text-gray-400 cursor-pointer w6 rounder hover:bg-gray-300 hover:text-blue-500"
+          className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
           onClick={() => vote(-1)}
         >
           <i
-            className={classNames("icon-arrow-down", {
-              "text-blue-600": userVote === -1,
+            className={classNames('icon-arrow-down', {
+              'text-blue-600': userVote === -1,
             })}
           ></i>
         </div>
@@ -70,7 +73,6 @@ export default function PostCard({
       {/* Post data section */}
       <div className="w-full p-2">
         <div className="flex items-center">
-          
           <Link href={`/r/${subName}`}>
             <img
               src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
@@ -82,7 +84,6 @@ export default function PostCard({
               /r/{subName}
             </a>
           </Link>
-          
           <p className="text-xs text-gray-500">
             <span className="mx-1">•</span>
             Posted by
@@ -106,7 +107,7 @@ export default function PostCard({
             <a>
               <ActionButton>
                 <i className="mr-1 fas fa-comment-alt fa-xs"></i>
-                <span className="font-bold">{commentCount}</span>
+                <span className="font-bold">{commentCount} Comments</span>
               </ActionButton>
             </a>
           </Link>
@@ -121,5 +122,5 @@ export default function PostCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

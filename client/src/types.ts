@@ -44,6 +44,7 @@ export interface Post {
     username: string
     createdAt: string
     updatedAt: string
+    post?: Post
     // Virtuals
     userVote: number
     voteScore: number

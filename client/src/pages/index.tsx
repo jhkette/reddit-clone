@@ -1,17 +1,14 @@
-
-import Head from 'next/head'
-import { Fragment} from 'react'
-import PostCard from '../components/PostCard'
-import useSWR from 'swr'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Post, Sub } from '../types'
-
-
+import Head from "next/head";
+import { Fragment } from "react";
+import PostCard from "../components/PostCard";
+import useSWR from "swr";
+import Link from "next/link";
+import Image from "next/image";
+import { Post, Sub } from "../types";
 
 export default function Home() {
- const {data: posts} = useSWR('./posts')
- const {data: topSubs} = useSWR('./misc/top-subs')
+  const { data: posts } = useSWR<Post[]>("./posts");
+  const { data: topSubs } = useSWR<Sub[]>("./misc/top-subs");
   return (
     <Fragment>
       <Head>
@@ -22,7 +19,6 @@ export default function Home() {
         <div className="w-160">
           {posts?.map((post) => (
             <PostCard post={post} key={post.identifier} />
-            
           ))}
         </div>
         {/* Sidebar */}
@@ -34,23 +30,25 @@ export default function Home() {
               </p>
             </div>
             <div className="">
-            {topSubs?.map((sub: Sub) => (
+              {topSubs?.map((sub) => (
                 <div
                   key={sub.name}
                   className="flex items-center px-4 py-2 text-xs border-b"
                 >
-                  <div className="mr-2 overflow-hidden rounded-full cursor-pointer">
-                    <Link href={`/r/${sub.name}`}>
+                  <Link href={`/r/${sub.name}`}>
+                    <a>
                       <Image
                         src={sub.imageUrl}
+                        className="rounded-full cursor-pointer"
                         alt="Sub"
                         width={(6 * 16) / 4}
                         height={(6 * 16) / 4}
                       />
-                    </Link>
-                  </div>
+                    </a>
+                  </Link>
+
                   <Link href={`/r/${sub.name}`}>
-                    <a className="font-bold hover:cursor-pointer">
+                    <a className="ml-2 font-bold hover:cursor-pointer">
                       /r/{sub.name}
                     </a>
                   </Link>
@@ -58,12 +56,11 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </div> 
-
+          </div>
         </div>
       </div>
     </Fragment>
-  )
+  );
 }
 
 // server side rendering

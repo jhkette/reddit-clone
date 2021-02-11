@@ -103,6 +103,28 @@ const upload = multer({
 
 }) 
 
+const searchSubs = async (req: Request, res: Response) => {
+   try {
+     const name = req.params.name
+     if(isEmpty(name)){
+       return res.status(400).json({error: 'Name must not be empty'})
+     }
+     
+     const subs = await getRepository(Sub)
+      .createQueryBuilder() 
+      // `${name.toLowerCase().trim()}% 
+      // with the percentage at the  end it will find rea => react 
+      // but will not find ea => react - this make more sense for our search
+      // without % search would fail most of the time - as search would need to be exact 
+      .where('LOWER(name) LIKE :name', {name: `${name.toLowerCase().trim()}%`})
+      .getMany()
+      return res.json(subs)
+   } catch (err) {
+     console.log(err)
+     return res.status(500).json({error: 'Something went wrong'})
+   }
+}
+
 
 const uploadSubImage = async (req: Request, res: Response) => {
   const sub: Sub = res.locals.sub
@@ -145,5 +167,6 @@ const router = Router()
 router.post('/:name/image', user, auth, ownSub, upload.single('file'), uploadSubImage)
 router.post('/', user, auth, createSub)
 router.get('/:name', user, getSub)
+router.get('/search/:name', searchSubs)
 
 export default router
