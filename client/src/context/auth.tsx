@@ -2,6 +2,9 @@ import Axios from 'axios'
 import { createContext, useContext, useEffect, useReducer } from 'react'
 import { User } from '../types'
 
+// this way of using context/ design pattern comes from 
+// https://kentcdodds.com/blog/how-to-use-react-context-effectively
+// sandbox example https://codesandbox.io/s/react-codesandbox-je6cc?file=/src/count-context.js
 interface State {
   authenticated: boolean
   user: User | undefined
@@ -45,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     loading: true,
   })
  
-//   custom dispatch and adds it to an object
+//   custom dispatch and adds type and payload as an object it to an object
   const dispatch = (type: string, payload?: any) =>
     defaultDispatch({ type, payload })
 
