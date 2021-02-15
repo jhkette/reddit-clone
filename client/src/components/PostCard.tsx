@@ -31,6 +31,7 @@ export default function PostCard({
     username,
     sub
   },
+  revalidate
 }: PostCardProps) {
   const vote = async (value: number) => {
     try {
@@ -39,6 +40,7 @@ export default function PostCard({
         slug,
         value,
       });
+      if (revalidate) revalidate()
     } catch (err) {
       console.log(err);
     }
