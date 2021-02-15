@@ -23,7 +23,7 @@ export default function Home() {
   const description =
     "Reddit is a network of communities based on people's interests. Find communities you're interested in, and become part of an online community!"
   const title = 'readit: the front page of the internet'
-
+  
   const { authenticated } = useAuthState()
   // https://swr.vercel.app/docs/pagination#useswrinfinite
   // see swr pagination 
