@@ -16,7 +16,7 @@ interface PostCardProps {
   revalidate?: Function;
 }
 
-export default function PostCard({
+const PostCard  = ({
   post: {
     identifier,
     slug,
@@ -32,7 +32,7 @@ export default function PostCard({
     sub
   },
   revalidate
-}: PostCardProps) {
+} : PostCardProps) => {
   const vote = async (value: number) => {
     try {
       const res = await Axios.post("/misc/vote", {
@@ -40,6 +40,7 @@ export default function PostCard({
         slug,
         value,
       });
+      // revalidate revalidates page - in this case fetching votes
       if (revalidate) revalidate()
     } catch (err) {
       console.log(err);
@@ -142,3 +143,5 @@ export default function PostCard({
     </div>
   );
 }
+
+export default PostCard

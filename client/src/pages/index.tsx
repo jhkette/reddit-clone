@@ -13,7 +13,7 @@ import { useAuthState } from '../context/auth'
 
 dayjs.extend(relativeTime)
 
-export default function Home() {
+const Home = () => {
   // local state -- the observedPost
   const [observedPost, setObservedPost] = useState('')
 
@@ -140,6 +140,8 @@ export default function Home() {
     </Fragment>
   )
 }
+
+export default Home;
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {
 //   try {

@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   })
  
 //   custom dispatch and adds type and payload as an object it to an object
-  const dispatch = (type: string, payload?: any) =>
+  const dispatch = (type: string, payload?: any):void =>
     defaultDispatch({ type, payload })
 
     // runs

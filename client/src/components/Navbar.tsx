@@ -9,7 +9,7 @@ import RedditLogo from "../images/reddit.svg";
 import { Sub } from "../types";
 import { useRouter } from "next/router";
 
-const Navbar: React.FC = () => {
+const Navbar = ()=> {
   // local state
   const [name, setName] = useState("");
   const [subs, setSubs] = useState<Sub[]>([]);

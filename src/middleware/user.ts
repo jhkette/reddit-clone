@@ -5,7 +5,7 @@ import User  from '../entities/User'
 
 // this middleware function checks for a cookie, decodes token using jwt verify
 // then find a user. then assign res.locals.user = user
-export default async (req: Request, res: Response, next: NextFunction) => {
+export default async (req: Request, res: Response, next: NextFunction): Promise<Object|void> => {
   try {
     // get token from cookies
     const token = req.cookies.token
