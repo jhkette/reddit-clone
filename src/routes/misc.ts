@@ -9,10 +9,12 @@ import Sub from '../entities/Sub'
 import auth from '../middleware/auth'
 import user from "../middleware/user"; 
 
-const vote = async (req: Request, res: Response) => {
+// this the voting function - useful way
+// of implementing this functionality 
+const vote = async (req: Request, res: Response): Promise<Object>  => {
   const { identifier, slug, commentIdentifier, value } = req.body
 
-  // Validate vote value
+  // Validate vote value - it has to be one of these values
   if (![-1, 0, 1].includes(value)) {
     return res.status(400).json({ value: 'Value must be -1, 0 or 1' })
   }
@@ -33,11 +35,13 @@ const vote = async (req: Request, res: Response) => {
     }
 
     if (!vote && value === 0) {
-      // if no vote and value = 0 return error
+      // if no vote and value = 0 return error ie there is not a value for the vote and 
+      // the vote itself can't be found so return an error
       return res.status(404).json({ error: 'Vote not found' })
     } else if (!vote) {
       // If no vote create it 
       vote = new Vote({ user, value })
+      // assign vote to comment or post
       if (comment) vote.comment = comment
       else vote.post = post
       await vote.save()
@@ -64,7 +68,7 @@ const vote = async (req: Request, res: Response) => {
   }
 }
 
-const topSubs = async (_: Request, res: Response) => {
+const topSubs = async (_: Request, res: Response): Promise<Object> => {
   try {
     /**
      * SELECT s.title, s.name,

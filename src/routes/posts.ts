@@ -6,7 +6,8 @@ import Sub from "../entities/Sub";
 import Comment from "../entities/Comment";
 
 
-const createPost = async (req: Request, res: Response) => {
+
+const createPost = async (req: Request, res: Response): Promise<Object> => {
     // destructure stuff from req.body
   const { title, body, sub } = req.body;
   const user = res.locals.user;
@@ -29,14 +30,19 @@ const createPost = async (req: Request, res: Response) => {
   }
 };
 
-const getPosts = async (req: Request, res: Response) => {
+// 
+const getPosts = async (req: Request, res: Response): Promise<Object> => {
   const currentPage: number = (req.query.page || 0) as number
   const postsPerPage: number = (req.query.count || 8) as number
 
   try {
+    // this allows us to do reloading of posts 
+    // when page scrolss down
     const posts = await Post.find({
       order: { createdAt: 'DESC' },
       relations: ['comments', 'votes', 'sub'],
+      //  It will select results from position - current page (pagination offset), 
+      // and will select only 8 results (pagination limit). 
       skip: currentPage * postsPerPage,
       take: postsPerPage,
     })
@@ -51,7 +57,7 @@ const getPosts = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Something went wrong' })
   }
 }
-const getPost = async (req: Request, res: Response) => {
+const getPost = async (req: Request, res: Response): Promise<Object> => {
   try {
     const { identifier, slug } = req.params;
     const post = await Post.findOneOrFail(
@@ -73,7 +79,7 @@ const getPost = async (req: Request, res: Response) => {
   }
 };
 
-const commentOnPost = async (req: Request, res: Response) => {
+const commentOnPost = async (req: Request, res: Response): Promise<Object> => {
   const { identifier, slug } = req.params;
   const body = req.body.body;
   try {
@@ -95,7 +101,8 @@ const commentOnPost = async (req: Request, res: Response) => {
   }
 };
 
-const getPostComments = async (req: Request, res: Response) => {
+
+const getPostComments = async (req: Request, res: Response): Promise<Object> => {
   const {identifier, slug} = req.params;
 
   try {

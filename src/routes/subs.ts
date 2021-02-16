@@ -12,7 +12,7 @@ import user from "../middleware/user";
 import Post from '../entities/Post'
 import {makeId} from '../util/helpers'
 
-const createSub = async (req: Request, res: Response) => {
+const createSub = async (req: Request, res: Response):Promise<Object> => {
   const { name, title, description } = req.body
   const user: User = res.locals.user
 
@@ -46,7 +46,7 @@ const createSub = async (req: Request, res: Response) => {
   }
 } 
 
-const getSub = async (req: Request, res: Response) => {
+const getSub = async (req: Request, res: Response): Promise<Object> => {
   const name = req.params.name
   try {
     const sub = await Sub.findOneOrFail({name})
@@ -68,7 +68,7 @@ const getSub = async (req: Request, res: Response) => {
     
   }
 }
-const ownSub = async (req: Request, res: Response, next: NextFunction) => {
+const ownSub = async (req: Request, res: Response, next: NextFunction): Promise<void|Object> => {
   const user: User = res.locals.user
 
   try {
@@ -93,7 +93,7 @@ const upload = multer({
       callback(null, name+ path.extname(file.originalname))
     }
   }),
-  fileFilter: (_, file: any, callback: FileFilterCallback) => {
+  fileFilter: (_, file, callback: FileFilterCallback) => {
     if(file.mimetype == 'image/jpeg' || file.mimetype == 'image/png'){
       callback(null, true)
     }else{
@@ -103,7 +103,7 @@ const upload = multer({
 
 }) 
 
-const searchSubs = async (req: Request, res: Response) => {
+const searchSubs = async (req: Request, res: Response) :Promise<Object> => {
    try {
      const name = req.params.name
      if(isEmpty(name)){
@@ -126,7 +126,7 @@ const searchSubs = async (req: Request, res: Response) => {
 }
 
 
-const uploadSubImage = async (req: Request, res: Response) => {
+const uploadSubImage = async (req: Request, res: Response) : Promise<Object> => {
   const sub: Sub = res.locals.sub
   try {
     const type = req.body.type

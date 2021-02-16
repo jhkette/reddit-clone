@@ -16,6 +16,8 @@ import { FormEvent, useState, useEffect } from 'react'
 
 dayjs.extend(relativeTime)
 
+// displays individual post page with comments ie   
+// http://localhost:3000/r/reactjs/IvzYvbG/whats_your_favourite_react_component_library
 export default function PostPage() {
   // Local state - this is comment from form
   // it is posted to DB using axios when form is submitted
@@ -40,8 +42,9 @@ export default function PostPage() {
   if (error) router.push('/')
 
   useEffect(() => {
-    if (!post) return
+    if (!post) return // if no post don't set desc
     let desc = post.body || post.title
+    // run substring to get first 159 chars then concat string onto end
     desc = desc.substring(0, 158).concat('..') // Hello world..
     setDescription(desc)
   }, [post])

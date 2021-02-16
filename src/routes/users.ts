@@ -5,7 +5,7 @@ import User from '../entities/User'
 
 import user from '../middleware/user'
 
-const getUserSubmissions = async (req: Request, res: Response) => {
+const getUserSubmissions = async (req: Request, res: Response):Promise<Object> => {
   // get user submission - this route gets all the user submission
   try {
     // get user from params

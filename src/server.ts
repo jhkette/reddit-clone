@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm";
+import { Connection, createConnection } from "typeorm";
 import express from "express";
 import morgan from "morgan";
 import cookieParser from 'cookie-parser'
@@ -39,9 +39,6 @@ app.use(
 // use middleware trim
 app.use(trim)
 
-app.get("/", (_, res) => {
-  res.send('Hello world')
-});
 
 // router for authentication routes ie login logout register etc
 app.use('/api/auth', authRoutes)
@@ -61,7 +58,7 @@ app.use('/api/users', userRoutes)
 
 app.listen(PORT, async () => {
   try {
-    await createConnection();
+    await createConnection()
     console.log("Database connected");
   } catch (err) {
     console.log(err);

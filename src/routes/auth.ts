@@ -10,7 +10,7 @@ import user from "../middleware/user";
 
 // Map errors helper function
 // return object with key - value of errors
-const mapErrors = (errors: Object[]) => {
+const mapErrors = (errors: Object[]): Object => {
   return errors.reduce((prev: any, err: any) => {
     prev[err.property] = Object.entries(err.constraints)[0][1]
     return prev
@@ -18,7 +18,7 @@ const mapErrors = (errors: Object[]) => {
 }
 
 // register function
-const register = async (req: Request, res: Response) => {
+const register = async (req: Request, res: Response) : Promise<Object> => {
   const { email, username, password } = req.body;
   try {
     // errors object
@@ -50,7 +50,7 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
-const login = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response): Promise<Object> => {
   const {username, password} = req.body;
   try {
     // initialise errors object
@@ -88,12 +88,12 @@ const login = async (req: Request, res: Response) => {
   }
 }
 
-const me = (_: Request, res: Response) => {
+const me = (_: Request, res: Response): Object => {
     return res.json(res.locals.user)
 }
 
 // logout function
-const logout = (_: Request, res: Response) => {
+const logout = (_: Request, res: Response): void|Object => {
   // we remove cookie here by making it out of data
   res.set(
     'Set-Cookie',

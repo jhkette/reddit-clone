@@ -11,10 +11,15 @@ import { Sub } from '../../types'
 import { useAuthState } from '../../context/auth'
 import Axios from 'axios'
 
+/* SUB HOME PAGE ie  http://localhost:3000/r/reactjs/ 
+- shows a list of subs*/
+
 export default function SubPage() {
   // Local state
-  // it gets set by useEffect hook
+  // it gets set by useEffect hook - this finds out if the user owns the sub or not
   const [ownSub, setOwnSub] = useState(false)
+   // description get set by useffect hook - it provides desc for meta tags/description
+  const [description, setDescription] = useState('')
   // Global state - get if the authenticaded and user details
   const { authenticated, user } = useAuthState()
   // Utils
@@ -31,7 +36,12 @@ export default function SubPage() {
   useEffect(() => {
     if (!sub) return
     setOwnSub(authenticated && user.username === sub.username)
+    let desc = sub.description || sub.title
+    // run substring to get first 159 chars then concat string onto end
+    desc = desc.substring(0, 158).concat('..') // Hello world..
+    setDescription(desc)
   }, [sub])
+ 
   // openFileInput is a function that open file selection window
   const openFileInput = (type: string) => {
     if (!ownSub) return
@@ -73,6 +83,11 @@ export default function SubPage() {
     <div>
       <Head>
         <title>{sub?.title}</title>
+        <meta name="description" content={description}></meta>
+        <meta property="og:description" content={description} />
+        <meta property="og:title" content={sub?.title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:title" content={sub?.title} />
       </Head>
 
       {sub && (
