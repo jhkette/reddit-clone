@@ -43,13 +43,13 @@ export default function SubPage() {
   }, [sub])
  
   // openFileInput is a function that open file selection window
-  const openFileInput = (type: string) => {
+  const openFileInput = (type: string): void => {
     if (!ownSub) return
     fileInputRef.current.name = type
     fileInputRef.current.click()
   }
   //  uploadimage gets file appends file and fileinput
-  const uploadImage = async (event: ChangeEvent<HTMLInputElement>) => {
+  const uploadImage = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files[0]
     const formData = new FormData()
     formData.append('file', file)

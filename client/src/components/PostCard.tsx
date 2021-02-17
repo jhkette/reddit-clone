@@ -33,7 +33,7 @@ const PostCard  = ({
   },
   revalidate
 } : PostCardProps) => {
-  const vote = async (value: number) => {
+  const vote = async (value: number): Promise<void> => {
     try {
       const res = await Axios.post("/misc/vote", {
         identifier,

@@ -13,7 +13,7 @@ import axios from "axios";
 Axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL + '/api';
 Axios.defaults.withCredentials = true;
 
-const fetcher = async (url: string) => {
+const fetcher = async (url: string):Promise<Object> => {
   try {
     const res = await axios.get(url)
     return res.data

@@ -21,7 +21,7 @@ const Navbar = ()=> {
 
   const router = useRouter();
 
-  const logout = () => {
+  const logout = (): void => {
     Axios.get("/auth/logout")
       .then(() => {
         dispatch("LOGOUT");
@@ -41,7 +41,7 @@ const Navbar = ()=> {
     searchSubs();
   }, [name]);
 
-  const searchSubs = async () => {
+  const searchSubs = async (): Promise<void> => {
     // clear timeout - ie if someone types r then rea
     // we don't want them to stack - we want to get just the results
     // Prevent the function set with the setTimeout() to execute:
@@ -60,7 +60,7 @@ const Navbar = ()=> {
     );
   };
   //  go to sub function using router
-  const goToSub = (subName: string) => {
+  const goToSub = (subName: string): void => {
     router.push(`/r/${subName}`);
     setName("");
   };

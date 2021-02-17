@@ -50,7 +50,7 @@ export default function PostPage() {
   }, [post])
 
   // VOTE FUNCTION
-  const vote = async (value: number, comment?: Comment) => {
+  const vote = async (value: number, comment?: Comment): Promise<void> => {
     // If not logged in go to login
     if (!authenticated) router.push('/login')
 
@@ -198,7 +198,7 @@ export default function PostPage() {
                     </div>
                   </div>
                 </div>
-                {/* Comment input area */}
+                {/* ------------------------Comment input area----------------------------------- */}
                 <div className="pl-10 pr-6 mb-4">
                   {/* only show if authenticated */}
                   {authenticated ? (

@@ -18,7 +18,7 @@ export default function Register() {
   const router = useRouter()
   if(authenticated) router.push('/')
 
-  const submitForm = async (event: FormEvent) => {
+  const submitForm = async (event: FormEvent): Promise<void> => {
     event.preventDefault()
 
     if (!agreement) {

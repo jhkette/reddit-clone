@@ -51,7 +51,7 @@ const Home = () => {
     }
   }, [posts])
 
-  const observeElement = (element: HTMLElement) => {
+  const observeElement = (element: HTMLElement): void => {
     if (!element) return
     const observer = new IntersectionObserver(
       (entries) => {

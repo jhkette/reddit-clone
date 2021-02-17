@@ -16,6 +16,8 @@ import { makeId } from "../util/helpers";
 import Vote from "./Vote";
 import { Expose } from "class-transformer";
 
+/* COMMENT ENTITY */
+
 @TOEntity("comments")
 export default class Comment extends Entity {
   constructor(comment: Partial<Comment>) {

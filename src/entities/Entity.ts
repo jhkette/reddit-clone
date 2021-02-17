@@ -6,6 +6,7 @@ import {
   } from 'typeorm'
   import { classToPlain, Exclude } from 'class-transformer'
   
+  /* Entity class is used as a base by other classes*/
   export default abstract class Entity extends BaseEntity {
     @Exclude()
     @PrimaryGeneratedColumn()

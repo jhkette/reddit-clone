@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Connection, createConnection } from "typeorm";
+import { createConnection } from "typeorm";
 import express from "express";
 import morgan from "morgan";
 import cookieParser from 'cookie-parser'

@@ -17,7 +17,7 @@ export default function Register() {
   if(authenticated) router.push('/')
   const dispatch = useAuthDispatch()
 
-  const submitForm = async (event: FormEvent) => {
+  const submitForm = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
     try {
      const res = await Axios.post("/auth/login", {
