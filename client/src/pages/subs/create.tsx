@@ -16,7 +16,7 @@ export default function create() {
   const router = useRouter()
   
   // submitForm
-  const submitForm = async (event: FormEvent) => {
+  const submitForm = async (event: FormEvent):Promise<void> => {
     event.preventDefault()
 
     try {

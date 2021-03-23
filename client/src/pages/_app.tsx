@@ -21,8 +21,7 @@ const fetcher = async (url: string):Promise<Object> => {
     throw err.response.data   
   }
 }
-
-function App({ Component, pageProps }: AppProps) {
+const App: React.FC <AppProps> =({ Component, pageProps }) =>{
   const { pathname } = useRouter();
   const authRoutes = ["/register", "/login"];
   const authRoute = authRoutes.includes(pathname);

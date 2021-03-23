@@ -5,7 +5,7 @@ import { useAuthState } from '../context/auth'
 import Link from 'next/link'
 
 
-const Sidebar = ({ sub }: {sub: Sub}) =>  {
+export default function Sidebar({ sub }: { sub: Sub }) {
   const { authenticated } = useAuthState()
 
   return (
@@ -40,4 +40,3 @@ const Sidebar = ({ sub }: {sub: Sub}) =>  {
     </div>
   )
 }
-export default Sidebar
